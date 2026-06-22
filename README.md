@@ -2,7 +2,7 @@
 
 my skills and stuff.
 
-- [`rpi`](./rpi) plugin - `just install-rpi`
+- [`rpi`](./marketplace/rpi) plugin - `just install-rpi`
 
 ## how to install
 
