@@ -6,5 +6,7 @@
         "name": "Matthew Porter",
         "url": "https://github.com/M-Porter"
     },
-    "license": "MIT"
+    "license": "MIT",
+    "homepage": "https://github.com/M-Porter/skills/blob/main/rpi/README.md",
+    "repository": "https://github.com/M-Porter/skills/tree/main/rpi"
 }
