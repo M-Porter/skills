@@ -6,5 +6,10 @@ default:
 install-all:
     just install-rpi
 
-install-rpi:
-    claude --plugin-dir ./rpi
+# Install the local marketplace
+install-marketplace:
+    claude plugin marketplace add ./marketplace
+
+# Install the "rpi" plugin
+install-rpi: install-marketplace
+    claude plugin install rpi@matts-marketplace

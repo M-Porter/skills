@@ -1,0 +1,14 @@
+{
+    "name": "matts-marketplace",
+    "owner": {
+        "name": "Matthew Porter",
+        "url": "https://github.com/M-Porter"
+    },
+    "plugins": [
+        {
+            "name": "rpi",
+            "source": "./rpi",
+            "description": "Plugin providing research, plan, and implement development skills."
+        }
+    ]
+}
