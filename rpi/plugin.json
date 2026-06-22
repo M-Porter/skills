@@ -1,0 +1,10 @@
+{
+    "name": "rpi",
+    "description": "Research, plan, implement plugin.",
+    "version": "1.0.0",
+    "author": {
+        "name": "Matthew Porter",
+        "url": "https://github.com/M-Porter"
+    },
+    "license": "MIT"
+}
