@@ -16,11 +16,19 @@ RESEARCH_FILE = $ARGUMENTS // Path to research.md file
 ## Validation
 
 - Ensure RESEARCH_FILE exists and is readable. If it is missing or unreadable, STOP and report the error — do not build or write a plan from a missing input.
-- Extract directory path from RESEARCH_FILE for output location
+- Extract directory path from RESEARCH_FILE as the default output location, then confirm it with the user per "Output Location (ask up front)" below
+
+## Output Location (ask up front)
+
+Before analyzing the research file or building the plan, ask the user where `plan.md` should be written. By default it goes in the same directory as RESEARCH_FILE (typically `./thoughts/SHORT_NAME/`). Call AskUserQuestion (header e.g. "Output dir") with a question like "Save plan.md in the same directory as the research file (<dirname of RESEARCH_FILE>)?":
+- First option: "Yes, use that directory" (Recommended) — description: same directory as RESEARCH_FILE
+- Second option: "Use a different directory" — description: you'll specify the path
+
+Record the confirmed location as PLAN_OUTPUT_DIR. If the user picks the default, PLAN_OUTPUT_DIR = dirname(RESEARCH_FILE). If they choose otherwise (including via a custom "Other" answer with an explicit path), PLAN_OUTPUT_DIR = that path. Apply PLAN_OUTPUT_DIR in the Output Location step below.
 
 ## Commit Strategy (ask up front)
 
-Before analyzing the research file or building the plan, ask the user whether the plan should include commit checkpoints. Call AskUserQuestion (header e.g. "Commits") with a question like "Should the plan include commit tasks at logical change boundaries?":
+Also ask the user whether the plan should include commit checkpoints. Call AskUserQuestion (header e.g. "Commits") with a question like "Should the plan include commit tasks at logical change boundaries?":
 - First option: "Yes, add commit checkpoints"
 - Second option: "No commits in plan"
 
@@ -128,7 +136,7 @@ Build the plan from the analyzer's returned output. Reading the research file di
 
 ### Output Location
 
-Create single file `plan.md` in same directory as RESEARCH_FILE. You (the coordinator) are the sole author of `plan.md`; write it exactly once, after the analyzer result is in hand. The Write tool creates the directory if needed, so no separate `mkdir` step is required.
+Create single file `plan.md` in PLAN_OUTPUT_DIR (confirmed in the "Output Location" step above; defaults to the same directory as RESEARCH_FILE). You (the coordinator) are the sole author of `plan.md`; write it exactly once, after the analyzer result is in hand. The Write tool creates the directory if needed, so no separate `mkdir` step is required.
 
 The plan should use H2 headings (##) to organize phases within the single file.
 

@@ -1,7 +1,7 @@
 ---
 name: research
 description: Research a problem using codebase and web search agents, compile findings into comprehensive research document
-allowed-tools: Agent, Read, Write
+allowed-tools: Agent, Read, Write, AskUserQuestion
 argument-hint: "[Problem statement]"
 ---
 
@@ -13,12 +13,14 @@ Launch parallel research agents to investigate the problem statement from both c
 
 PROBLEM_STATEMENT = $ARGUMENTS
 SHORT_NAME = kebab-case version of problem statement (e.g., "Fix login authentication bug" → "fix-login-authentication-bug") prefixed by the current date in YYYY-MM-DD (e.g. 2026-06-22) form.
-OUTPUT_DIR = ./thoughts/SHORT_NAME/
-OUTPUT_FILE = ./thoughts/SHORT_NAME/research.md
+OUTPUT_DIR = ./thoughts/SHORT_NAME/ by default, confirmed or overridden per Step 0
+OUTPUT_FILE = OUTPUT_DIR/research.md
 
 ## Task Overview
 
 This command executes the Research phase of the RPI Strategy by:
+
+0. **Confirm Output Location**: Ask the user whether to use the default `./thoughts/SHORT_NAME/` directory or another location
 
 1. **Parallel Codebase Research**: Launch three specialized codebase agents simultaneously
    - @agent-codebase-locator: Find WHERE relevant code exists
@@ -31,7 +33,15 @@ This command executes the Research phase of the RPI Strategy by:
 3. **Synthesis**: Compile all findings into a structured research document
    - Follow RPI Strategy Research phase output format
    - Include FAR Scale validation
-   - Output to ./thoughts/[short-name]/research.md
+   - Output to OUTPUT_FILE
+
+## Step 0: Confirm Output Location (ask up front)
+
+Before launching any research agents, ask the user where the research document should be saved. Call AskUserQuestion (header e.g. "Output dir") with a question like "Save the research document to ./thoughts/SHORT_NAME/research.md?":
+- First option: "Yes, use ./thoughts/" (Recommended) — description: default RPI Strategy location
+- Second option: "Use a different directory" — description: you'll specify the path
+
+If the user selects the default, set OUTPUT_DIR = ./thoughts/SHORT_NAME/. If the user selects a different directory (including via a custom "Other" answer with an explicit path), set OUTPUT_DIR to that path and derive OUTPUT_FILE = OUTPUT_DIR/research.md accordingly. Record the confirmed OUTPUT_DIR/OUTPUT_FILE before proceeding to Step 1.
 
 ## Step 1: Launch All Research Agents in Parallel
 
@@ -93,7 +103,7 @@ IMPORTANT: Return your findings as your final message ONLY. Do NOT create, write
 
 ## Step 2: Confirmation Gate (do not skip)
 
-Before writing anything, confirm you have received the returned result text from ALL FOUR agents. If any agent's result is missing, has not returned, or errored, STOP — do not create the output directory and do not write any file. Either re-launch the missing agent or report the failure. You may proceed to synthesis and write the research document ONLY after all four results are in hand.
+Before writing anything, confirm you have received the returned result text from ALL FOUR agents. If any agent's result is missing, has not returned, or errored, STOP — do not create the output directory and do not write any file. Either re-launch the missing agent or report the failure. You may proceed to synthesis and write the research document ONLY after all four results are in hand and OUTPUT_DIR was confirmed in Step 0.
 
 ## Step 3: Synthesize Findings into Research Document
 
@@ -103,7 +113,7 @@ Every section must be grounded in the specific agent result(s) it summarizes. Bu
 
 ### Research Document Structure
 
-Create `./thoughts/SHORT_NAME/research.md` with the following mandatory sections:
+Create `OUTPUT_FILE` (default `./thoughts/SHORT_NAME/research.md`, or the directory confirmed in Step 0) with the following mandatory sections:
 
 ```markdown
 # [Problem Statement] Research
@@ -178,7 +188,7 @@ Early hypotheses about:
 
 You (the coordinator) are the SOLE author of the output file. Write it exactly once, at the very end, only after the Step 2 gate has passed.
 
-1. Write the synthesized research document to `./thoughts/SHORT_NAME/research.md`. The Write tool creates parent directories automatically, so no separate `mkdir` step is needed.
+1. Write the synthesized research document to `OUTPUT_FILE` (the location confirmed in Step 0). The Write tool creates parent directories automatically, so no separate `mkdir` step is needed.
 2. Report completion with the file path.
 
 ## Quality Gates
@@ -196,7 +206,7 @@ Before completing, verify:
 
 ## Expected Outcome
 
-A comprehensive research document at `./thoughts/SHORT_NAME/research.md` that:
+A comprehensive research document at `OUTPUT_FILE` that:
 - Combines codebase analysis with external research
 - Provides validated, FAR-qualified findings
 - Follows RPI Strategy Research phase standards
@@ -204,6 +214,7 @@ A comprehensive research document at `./thoughts/SHORT_NAME/research.md` that:
 
 ## Notes
 
+- Always confirm the output directory with the user in Step 0 before writing anything, even though `./thoughts/SHORT_NAME/` remains the default
 - The short-name should be derived from the problem statement using kebab-case
 - Keep it concise but descriptive (e.g., "user-authentication-timeout" not "fix-the-bug-where-users")
 - All agent tasks run in parallel for efficiency
